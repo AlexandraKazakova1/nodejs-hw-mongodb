@@ -1,13 +1,3 @@
-import express from 'express';
+import { startServer } from './server.js';
 
-const app = express();
-
-const PORT = 3000;
-
-app.get('/', (req, res) => {
-  res.json({ massage: 'Hello World!' });
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+startServer();
