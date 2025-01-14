@@ -6,10 +6,8 @@ import { getEnvVar } from './utils/getEnvVar.js';
 import { getContactById, getAllContacts } from './services/contact.js';
 
 const PORT = Number(getEnvVar('PORT', '3000'));
-
+const app = express();
 export const setupServer = () => {
-  const app = express();
-
   app.use(express.json());
   app.use(cors());
 };
