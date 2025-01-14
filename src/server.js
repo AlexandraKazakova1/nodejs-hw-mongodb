@@ -25,9 +25,9 @@ app.get('/contacts', async (req, res) => {
   res.status(200).json({ data: contacts });
 });
 
-app.get('/contacts/:contactId', async (req, res) => {
-  const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+app.get('/contacts/:ObjectIdId', async (req, res) => {
+  const { ObjectIdId } = req.params;
+  const contact = await getContactById(ObjectIdId);
 
   if (!contact) {
     res.status(404).json({
