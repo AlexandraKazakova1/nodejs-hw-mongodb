@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import { getEnvVar } from '../utils/getEnvVar.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const initMongoConnection = async () => {
   try {
