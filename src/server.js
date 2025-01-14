@@ -3,11 +3,11 @@ import pino from 'pino-http';
 import cors from 'cors';
 
 import { getEnvVar } from './utils/getEnvVar.js';
-import { getAllStudents, getStudentById } from './services/students.js';
+import { getContactById, getAllContacts } from './services/contact.js';
 
 const PORT = Number(getEnvVar('PORT', '3000'));
 
-export const startServer = () => {
+export const setupServer = () => {
   const app = express();
 
   app.use(express.json());
@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('*', (req, res, next) => {
-  res.status(404).json({ message: 'Route not found' });
+  res.status(404).json({ message: 'Not found' });
 });
 
 app.use((err, req, res, next) => {
@@ -43,22 +43,22 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-app.get('/students', async (req, res) => {
-  const students = await getAllStudents();
-  res.status(200).json({ data: students });
+app.get('/contacts', async (req, res) => {
+  const contacts = await getAllContacts();
+  res.status(200).json({ data: contacts });
 });
 
-app.get('/students/:studentId', async (req, res) => {
-  const { studentId } = req.params;
-  const student = await getStudentById(studentId);
+app.get('/contacts/:contactId', async (req, res) => {
+  const { contactId } = req.params;
+  const contact = await getContactById(contactId);
 
-  if (!student) {
+  if (!contact) {
     res.status(404).json({
-      message: 'Student not found',
+      message: 'Contact not found',
     });
     return;
   }
   res.status(200).json({
-    data: student,
+    data: contact,
   });
 });
