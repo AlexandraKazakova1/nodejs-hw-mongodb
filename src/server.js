@@ -6,10 +6,8 @@ import { getEnvVar } from './utils/getEnvVar.js';
 import { getContactById, getAllContacts } from './services/contact.js';
 
 const PORT = Number(getEnvVar('PORT', '3000'));
-
+const app = express();
 export const setupServer = () => {
-  const app = express();
-
   app.use(express.json());
   app.use(cors());
 };
@@ -22,9 +20,23 @@ app.use(
   }),
 );
 
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Hello, World!',
+app.get('/contacts', async (req, res) => {
+  const contacts = await getAllContacts();
+  res.status(200).json({ data: contacts });
+});
+
+app.get('/contacts/:ObjectIdId', async (req, res) => {
+  const { ObjectIdId } = req.params;
+  const contact = await getContactById(ObjectIdId);
+
+  if (!contact) {
+    res.status(404).json({
+      message: 'Contact not found',
+    });
+    return;
+  }
+  res.status(200).json({
+    data: contact,
   });
 });
 
@@ -41,24 +53,4 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-});
-
-app.get('/contacts', async (req, res) => {
-  const contacts = await getAllContacts();
-  res.status(200).json({ data: contacts });
-});
-
-app.get('/contacts/:contactId', async (req, res) => {
-  const { contactId } = req.params;
-  const contact = await getContactById(contactId);
-
-  if (!contact) {
-    res.status(404).json({
-      message: 'Contact not found',
-    });
-    return;
-  }
-  res.status(200).json({
-    data: contact,
-  });
 });
