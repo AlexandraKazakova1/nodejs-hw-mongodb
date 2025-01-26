@@ -3,6 +3,8 @@ import {
   getContactById,
   getAllContacts,
   createContact,
+  deleteContact,
+  updateContact,
 } from '../services/contact.js';
 
 export const getContactsController = async (req, res, next) => {
@@ -34,5 +36,46 @@ export const createContactController = async (req, res) => {
     status: 201,
     message: 'Successfully created a contact!',
     data: contact,
+  });
+};
+
+export const deleteContactController = async (req, res) => {
+  const { ObjectId } = req.params;
+  const contact = await deleteContact(ObjectId);
+  if (!contact) {
+    next(createHttpError(404, 'Contact not found'));
+    return;
+  }
+  res.status(204).send();
+};
+
+export const upsertContactController = async (req, res) => {
+  const { ObjectId } = req.params;
+  const result = await updateContact(ObjectId, req.body, { upsert: true });
+
+  if (!result) {
+    next(createHttpError(404, 'Contact not found'));
+    return;
+  }
+  const status = result.isNew ? 201 : 200;
+  res.status(status).json({
+    status,
+    message: 'Successfully upserted a contact!',
+    data: result.contact,
+  });
+};
+
+export const patchContactController = async (req, res, next) => {
+  const { ObjectId } = req.params;
+  const result = await updateContact(ObjectId, req.body);
+
+  if (!result) {
+    next(createHttpError(404, 'Contact not found'));
+    return;
+  }
+  res.json({
+    status: 200,
+    message: `Successfully patched a contact!`,
+    data: result.contact,
   });
 };
