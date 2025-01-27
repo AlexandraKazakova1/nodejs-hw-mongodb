@@ -9,7 +9,12 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 const PORT = Number(getEnvVar('PORT', '3000'));
 const app = express();
 export const setupServer = () => {
-  app.use(express.json());
+  app.use(
+    express.json({
+      type: ['application/json', 'application/vnd.api+json'],
+      limit: '100kb',
+    }),
+  );
   app.use(cors());
 };
 
