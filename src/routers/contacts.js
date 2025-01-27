@@ -4,7 +4,6 @@ import {
   getContactByIdController,
   createContactController,
   deleteContactController,
-  upsertContactController,
   patchContactController,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
@@ -19,7 +18,7 @@ router.post('/contacts', ctrlWrapper(createContactController));
 
 router.delete('/contacts/:ObjectId', ctrlWrapper(deleteContactController));
 
-router.put('/contacts/:ObjectId', ctrlWrapper(upsertContactController));
+// router.put('/contacts/:ObjectId', ctrlWrapper(upsertContactController));
 
 router.patch('/contacts/:ObjectId', ctrlWrapper(patchContactController));
 
