@@ -6,7 +6,6 @@ import {
   deleteContact,
   updateContact,
 } from '../services/contact.js';
-import mongoose from 'mongoose';
 
 export const getContactsController = async (req, res) => {
   const contacts = await getAllContacts();
@@ -19,9 +18,7 @@ export const getContactsController = async (req, res) => {
 
 export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(contactId)) {
-    throw createHttpError(400, 'Invalid contact ID format');
-  }
+
   const contact = await getContactById(contactId);
   if (!contact) {
     throw createHttpError(404, 'Contact not found');
@@ -42,11 +39,9 @@ export const createContactController = async (req, res) => {
   });
 };
 
-export const patchContactController = async (req, res) => {
+export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(contactId)) {
-    throw createHttpError(400, 'Invalid contact ID format');
-  }
+
   const result = await updateContact(contactId, req.body);
 
   if (!result) {
@@ -61,9 +56,7 @@ export const patchContactController = async (req, res) => {
 
 export const deleteContactController = async (req, res) => {
   const { contactId } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(contactId)) {
-    throw createHttpError(400, 'Invalid contact ID format');
-  }
+
   const contact = await deleteContact(contactId);
   if (!contact) {
     throw new createHttpError(404, 'Contact not found');
