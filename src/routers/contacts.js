@@ -18,7 +18,7 @@ router.get('/contacts', ctrlWrapper(getContactsController));
 
 router.get(
   '/contacts/:contactId',
-  isValidId('contactId'),
+  isValidId,
   ctrlWrapper(getContactByIdController),
 );
 
@@ -30,13 +30,13 @@ router.post(
 
 router.delete(
   '/contacts/:contactId',
-  isValidId('contactId'),
+
   ctrlWrapper(deleteContactController),
 );
 
 router.patch(
   '/contacts/:contactId',
-  isValidId('contactId'),
+  isValidId,
   validateBody(updateValidation),
   ctrlWrapper(patchContactController),
 );
