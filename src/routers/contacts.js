@@ -30,7 +30,7 @@ router.post(
 
 router.delete(
   '/contacts/:contactId',
-
+  isValidId,
   ctrlWrapper(deleteContactController),
 );
 
