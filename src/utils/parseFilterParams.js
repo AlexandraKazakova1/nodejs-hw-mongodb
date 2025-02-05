@@ -1,25 +1,37 @@
-const parseType = (contactType) => {
-  if (typeof contactType !== 'string') return undefined;
+import { CONTACT_TYPES } from '../constants/index.js';
 
-  const allowedTypes = ['work', 'home', 'personal'];
-  return allowedTypes.includes(contactType) ? contactType : undefined;
+const parseContactType = (contactType) => {
+  if (
+    typeof contactType === 'string' &&
+    Object.values(CONTACT_TYPES).includes(contactType)
+  ) {
+    return contactType;
+  }
+  return undefined;
 };
 
-const parseIsFavourite = (isFavourite) => {
-  return isFavourite === 'true'
-    ? true
-    : isFavourite === 'false'
-    ? false
-    : undefined;
+const parseIsFavourite = (string) => {
+  if (string === 'true') return true;
+  if (string === 'false') return false;
+  return undefined;
 };
 
 export const parseFilterParams = (query) => {
-  if (!query || typeof query !== 'object') return {}; // Додаємо перевірку
+  const filter = {};
 
-  const { contactType, isFavourite } = query;
+  if (query.contactType) {
+    const parsedContactType = parseContactType(query.contactType);
+    if (parsedContactType) {
+      filter.contactType = parsedContactType;
+    }
+  }
 
-  return {
-    contactType: parseType(contactType),
-    isFavourite: parseIsFavourite(isFavourite),
-  };
+  if (query.isFavourite !== undefined) {
+    const parsedIsFavourite = parseIsFavourite(query.isFavourite);
+    if (parsedIsFavourite !== undefined) {
+      filter.isFavourite = parsedIsFavourite;
+    }
+  }
+
+  return filter;
 };
