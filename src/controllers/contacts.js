@@ -56,20 +56,30 @@ export const createContactController = async (req, res) => {
     data: contact,
   });
 };
-export const patchContactController = async (req, res) => {
-  const { contactId } = req.params;
-  const userId = req.user._id;
+export const patchContactController = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const userId = req.user?._id;
 
-  const result = await updateContact(userId, contactId, req.body);
-  if (!result) {
-    throw createHttpError(404, 'Contact not found');
+    if (!userId) {
+      throw createHttpError(401, 'Unauthorized');
+    }
+
+    const updatedContact = await updateContact(userId, contactId, req.body);
+    if (!updatedContact) {
+      throw createHttpError(404, 'Contact not found');
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully updated contact!',
+      data: updatedContact,
+    });
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json({
-    status: 200,
-    message: 'Successfully patched a contact!',
-    data: result.contact,
-  });
 };
+
 export const deleteContactController = async (req, res) => {
   const { contactId } = req.params;
   const userId = req.user._id;
