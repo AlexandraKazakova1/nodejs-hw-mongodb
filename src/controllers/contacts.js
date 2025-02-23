@@ -11,6 +11,7 @@ import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -75,8 +76,8 @@ export const patchContactController = async (req, res, next) => {
       photoUrl = await saveFileToUploadDir(photo);
     }
   }
-  const contactIdAndUserId = { userId, _id: contactId };
-  const result = await updateContact(contactIdAndUserId, {
+
+  const result = await updateContact(contactId, userId, {
     ...req.body,
     photo: photoUrl,
   });
@@ -87,7 +88,7 @@ export const patchContactController = async (req, res, next) => {
   res.json({
     status: 200,
     message: `Successfully patched a contact!`,
-    data: result.contact,
+    data: result,
   });
 };
 
