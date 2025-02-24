@@ -63,7 +63,7 @@ export const createContactController = async (req, res, next) => {
       photoUrl = await saveFileToUploadDir(photo);
     }
   }
-  const contact = await createContact({ ...req.body, userId, photo: photoUrl });
+  const contact = await createContact(req.body, userId, photoUrl);
   res.status(201).json({
     status: 201,
     message: `Successfully created a contact!`,
@@ -87,10 +87,7 @@ export const patchContactController = async (req, res, next) => {
     }
   }
 
-  const result = await updateContact(userId, contactId, {
-    ...req.body,
-    photo: photoUrl,
-  });
+  const result = await updateContact(userId, contactId, req.body, photoUrl);
 
   if (!result) {
     throw createHttpError(404, 'Contact not found');

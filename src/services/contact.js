@@ -62,11 +62,7 @@ export const updateContact = async (
       ...options,
     },
   );
-  if (!result || !result.value) return null;
-  return {
-    contact: result.value,
-    isNew: Boolean(result?.lastErrorObject?.upserted),
-  };
+  return result.value;
 };
 export const deleteContact = async (userId, contactId) => {
   const contact = await ContactsCollection.findOneAndDelete({
