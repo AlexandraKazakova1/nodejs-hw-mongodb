@@ -33,7 +33,10 @@ requestBody:
           contactType:
             description: "Contact's number type"
             type: string
-            enum: ['work', 'home', 'personal']
+            enum:
+              - 'work'
+              - 'home'
+              - 'personal'
           photo:
             description: "Contact's photo"
             type: string
